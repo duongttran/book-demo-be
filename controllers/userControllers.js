@@ -77,7 +77,11 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) throw new Error("email and password is required");
     const user = await User.loginWithEmail(email, password);
-
+    if (!user) {
+      return res.status(401).json({
+        message: "email and password is not correct",
+      });
+    }
     const token = await generateToken(user);
     console.log(user);
 
